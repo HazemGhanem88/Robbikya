@@ -37,12 +37,6 @@ const schema = new mongoose.Schema({
     required: true,
     min: 0,
    },  
-   quantity:{
-
-    type: Number,
-    min: 0,
-    default: 0 
-   },
    quality:{
     type :String ,
     enum:['Used like new','Used good','Used fair'],
