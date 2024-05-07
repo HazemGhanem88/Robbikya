@@ -72,7 +72,7 @@ export const addProductToCart = asyncHandler(async (req, res, next) => {
 //@route GET
 //@access private/User
 export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
-  const cart = await  cartModel.findOne({ user: req.user._id });
+  const cart = await cartModel.findOne({ user: req.user._id });
   if (!cart) {
     res.status(404).json({ message: "cart Not Found" });
   }

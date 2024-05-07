@@ -78,8 +78,9 @@ const schema= new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:'product'
     }],
-
+   
 },
+
     {timestamps:true})
 
     schema.post('init', function(doc){
