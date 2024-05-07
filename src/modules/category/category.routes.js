@@ -6,7 +6,8 @@ import { addcategoryval, paramsval, updatecategoryval } from "./category.validat
 import { addcategory, deletecategory,getallcategories,getsinglecategory, updatecategory } from "./category.controller.js"
 import { protectRoutes } from "../../middleware/authentication.js"
 import { allowedTo } from "../../middleware/authorization.js"
-import { uploadsinglefile } from "../../services/uploadfile/upLoadfile.js"
+import { uploadsinglefile } from "../../services/uploadfile/UploadFiles.js"
+
 
 
 const categoryRouter = express.Router()

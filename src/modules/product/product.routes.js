@@ -5,7 +5,8 @@ import { addproduct, deleteproduct, getallproducts, getsingleproduct, updateprod
 import { validation } from "../../middleware/validation.js";
 import { protectRoutes } from "../../middleware/authentication.js";
 import { allowedTo } from "../../middleware/authorization.js";
-import { uploadfields } from "../../services/uploadfile/upLoadfile.js";
+import { uploadfields } from "../../services/uploadfile/UploadFiles.js";
+
 
 
 
