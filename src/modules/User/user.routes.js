@@ -22,7 +22,8 @@ import { validation } from "../../middleware/validation.js";
 import { protectRoutes } from "../../middleware/authentication.js";
 import { allowedTo } from "../../middleware/authorization.js";
 import { checkEmail } from "../../middleware/checkEmail.js";
-import { uploadsinglefile } from "../../services/uploadfile/uploadfile.js";
+import { uploadsinglefile } from "../../services/uploadfile/fileUpload.js";
+;
 
 
 
