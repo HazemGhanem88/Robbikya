@@ -67,7 +67,7 @@ const UpdatePassword = catchError(async (req, res, next) => {
   if (user && bcrypt.compareSync(req.body.currentPassword, user.password)) {
     let token = Jwt.sign(
       { userId: user._id, role: user.role },
-      process.env.JWT_Secret
+      "FUCK_YOU"
     );
     const hashPass = await bcrypt.hash(req.body.newPassword, 8);
     await UserModel.findByIdAndUpdate(req.user._id, {
