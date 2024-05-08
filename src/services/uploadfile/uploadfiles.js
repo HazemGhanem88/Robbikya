@@ -29,6 +29,6 @@ return upload
 }
 
 
-export const uploadsinglefile = fieldName=> fileupload().single(fieldName)
+export const uploadsinglefile = fieldName => fileupload().single(fieldName)
 export const uploadArrayoffiles = fieldName => fileupload().array(fieldName,10)
 export const uploadfields = fields => fileupload().fields(fields)

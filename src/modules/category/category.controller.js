@@ -3,17 +3,26 @@ import slugify from "slugify"
 import { categorymodel } from "../../../databases/models/category.model.js"
 import { catchError } from "../../middleware/catchError.js"
 import { ApiFeatures } from "../../utils/ApiFeatures.js"
-
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+  cloud_name: 'dpsp3oq9x', 
+  api_key: '435615528978193', 
+  api_secret: 'dX0u1peCmgM4jMa6xQVjfuyKL68' 
+});
 
 
 const addcategory =  catchError(async(req,res,next)=>{
-  
-    req.body.slug = slugify(req.body.name) 
-    req.body.image = req.file.filename   
-    let category = new categorymodel(req.body)
-     await category.save()
-     res.json({message:"suceess",category})
 
+  req.body.slug = slugify(req.body.name) 
+ cloudinary.uploader.upload(req.file.path, async(error, result) =>{
+   req.body.image=result.secure_url 
+   let category = new categorymodel(req.body)
+   await category.save()
+   res.json({message:"suceess",category})
+ })
+       
+ 
 })
 
 

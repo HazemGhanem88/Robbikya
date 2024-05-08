@@ -2,17 +2,45 @@ import { productmodel } from "../../../databases/models/product.model.js"
 import { catchError } from "../../middleware/catchError.js"
 import { ApiFeatures } from "../../utils/ApiFeatures.js"
 import slugify from "slugify"
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+  cloud_name: 'dpsp3oq9x', 
+  api_key: '435615528978193', 
+  api_secret: 'dX0u1peCmgM4jMa6xQVjfuyKL68' 
+});
 
 
-const addproduct =  catchError(async(req,res,next)=>{
-    req.body.slug = slugify(req.body.name) 
-    req.body.imgCover= req.files.imgCover[0].filename 
-    req.body.images = req.files.images.map((img)=> img.filename)   
-    let product = new productmodel(req.body)
-     await product.save()
-     res.json({message:"suceess",product})
 
-})
+export const uploadMultipleImages = async (images, folder) => {
+  const uploadPromises = images.map(image => 
+    cloudinary.uploader.upload(image.path, { folder })
+  );
+  const uploadResults = await Promise.all(uploadPromises);
+  return uploadResults.map(({ secure_url, public_id }) => ({ secure_url, public_id }));
+};
+
+
+const addproduct = catchError(async (req, res, next) => {
+      req.body.slug = slugify(req.body.title);
+     
+      const coverUploadResult = await cloudinary.uploader.upload(req.files.imgCover[0].path);
+      req.body.imgCover = coverUploadResult.secure_url;
+
+      if (req.files.images?.length > 0) {
+        
+          const imagesUploadResults = await uploadMultipleImages(req.files.images, "products");
+          req.body.images = imagesUploadResults;
+      }
+
+      const product = new productmodel(req.body);
+      await product.save();
+
+      res.json({ message: "success", product });
+  })
+
+
+
 
 
 const getallproducts =  catchError(async(req,res,next)=>{   
