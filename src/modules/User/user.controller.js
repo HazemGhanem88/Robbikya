@@ -4,12 +4,12 @@ import  Jwt from "jsonwebtoken"
 import * as bcrypt from "bcrypt"
 import { UserModel } from "../../../databases/models/user.model.js"
 import { catchError } from "../../middleware/catchError.js"
-
 import { sendEmailPcode } from "../../services/emails/sentEmailPinCode.js"
 import { AppError } from "../../utils/AppError.js"
 
 
 import {v2 as cloudinary} from 'cloudinary';
+import { ApiFeatures } from "../../utils/ApiFeatures.js"
           
 cloudinary.config({ 
   cloud_name: 'dpsp3oq9x', 
@@ -52,9 +52,14 @@ return next(new AppError("email or password incorrect", 401));
 
 //get all users by the admin
 const getAllUsers=catchError(async(req,res,next)=>{
-    let users= await UserModel.find({})
-    !users&& res.status(404).json({message:"No User Found!"});
-    res.json({message:"Success",page : apiFeatures.pageNumber,users})})
+  let apiFeatures = new ApiFeatures(UserModel.find(),req.query).pagination().filter().sort().fields().search()
+  let users= await apiFeatures.mongooseQuery
+   //let users= await UserModel.find({})
+  //!users&& res.status(404).json({message:"No User Found!"});
+    res.json({message:"Success", page : apiFeatures.pageNumber,users})})
+
+  
+
 
 //get profile data of useruser by the admin
 const getProfileData = catchError(async (req, res, next) => {
