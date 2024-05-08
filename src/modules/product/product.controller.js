@@ -22,7 +22,7 @@ export const uploadMultipleImages = async (images, folder) => {
 
 
 const addproduct = catchError(async (req, res, next) => {
-      req.body.slug = slugify(req.body.title);
+      req.body.slug = slugify(req.body.name);
      
       const coverUploadResult = await cloudinary.uploader.upload(req.files.imgCover[0].path);
       req.body.imgCover = coverUploadResult.secure_url;
