@@ -9,20 +9,28 @@ import { sendEmailPcode } from "../../services/emails/sentEmailPinCode.js"
 import { AppError } from "../../utils/AppError.js"
 
 
+import {v2 as cloudinary} from 'cloudinary';
+          
+cloudinary.config({ 
+  cloud_name: 'dpsp3oq9x', 
+  api_key: '435615528978193', 
+  api_secret: 'dX0u1peCmgM4jMa6xQVjfuyKL68' 
+});
 
 
 
 
 //signUp
 const signUp=catchError(async(req,res,next)=>{
-    req.body.image = req.file.filename 
+  cloudinary.uploader.upload(req.file.path, async(error, result) =>{
+   req.body.image=result.secure_url 
     let user= await UserModel.create(req.body)
    await user.hashPass()
    await user.save()
    let token=Jwt.sign({userId:user._id,role:user.role},"FUCK_YOU");
     res.status(201).json({ message: "success" ,user:user._id,token});
 })
-
+})
 
 //signIn
 const signIn = catchError(async (req, res, next) => {
@@ -46,7 +54,7 @@ return next(new AppError("email or password incorrect", 401));
 const getAllUsers=catchError(async(req,res,next)=>{
     let users= await UserModel.find({})
     !users&& res.status(404).json({message:"No User Found!"});
-    res.json({message:"Success",users})})
+    res.json({message:"Success",page : apiFeatures.pageNumber,users})})
 
 //get profile data of useruser by the admin
 const getProfileData = catchError(async (req, res, next) => {

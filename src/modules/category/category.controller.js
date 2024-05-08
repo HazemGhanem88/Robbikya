@@ -31,7 +31,7 @@ const getallcategories =  catchError(async(req,res,next)=>{
   let apiFeatures = new ApiFeatures(categorymodel.find(),req.query).pagination().filter().sort().fields().search()
   let categories= await apiFeatures.mongooseQuery
     
-    res.json({message:"suceess",categories})
+    res.json({message:"suceess",page : apiFeatures.pageNumber,categories})
 
 })
 

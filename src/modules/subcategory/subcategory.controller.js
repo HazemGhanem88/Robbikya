@@ -22,7 +22,7 @@ const getallsubcategories= catchError(async(req,res,next)=>{
 
     let apiFeatures = new ApiFeatures(subcategorymodel.find(filterObj),req.query).pagination().filter().sort().fields().search()
     let subcategories = await apiFeatures.mongooseQuery
-    res.json({message:"success",subcategories})
+    res.json({message:"success",page : apiFeatures.pageNumber,subcategories})
 })
 
 
