@@ -22,7 +22,7 @@ const schema = new mongoose.Schema({
 
 schema.post('init', function(doc){
 
-    doc.image="https://robbikya.onrender.com/"+"uploads/"+doc.image
+    //doc.image="https://robbikya.onrender.com/"+"uploads/"+doc.image
 })
 
 export const categorymodel = mongoose.model('category',schema)

@@ -57,10 +57,10 @@ const schema = new mongoose.Schema({
 },{timestamps: true})
 
 schema.post('init',function(doc){
-    if(doc.imgCover||doc.images){
-    doc.imgCover = "https://robbikya.onrender.com/" + "uploads/" + doc.imgCover;
-    doc.images = doc.images.map((img)=>"https://robbikya.onrender.com/" + "uploads/" + img)
+    //if(doc.imgCover||doc.images){
+   // doc.imgCover = "https://robbikya.onrender.com/" + "uploads/" + doc.imgCover;
+    //doc.images = doc.images.map((img)=>"https://robbikya.onrender.com/" + "uploads/" + img)
 
 }
-})
+)
 export const productmodel =mongoose.model('product',schema)
