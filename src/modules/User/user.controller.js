@@ -65,6 +65,7 @@ const getProfileData = catchError(async (req, res, next) => {
     !user && next(new AppError("not user found", 404));
     user && res.json({ message: "success", user });
   });
+
   cloudinary.config({ 
     cloud_name: 'dpsp3oq9x', 
     api_key: '435615528978193', 
@@ -72,14 +73,18 @@ const getProfileData = catchError(async (req, res, next) => {
   });
   
 
-const updateUser=catchError(async(req,res,next)=>{
-  if(req.file) cloudinary.uploader.upload(req.file.path, async(error, result) =>{
-    req.body.image=result.secure_url 
-    let User= await UserModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
-    !User &&  res.status(404).json( {message:'User not found!'})
-    User && res.json({ message: "success", User });
-  })
-})
+const updateUser = catchError(async (req, res, next) => {
+    if (req.file) {
+        cloudinary.uploader.upload(req.file.path, async (error, result) => {
+            req.body.image = result.secure_url;
+            let user = await UserModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+            
+            !user && res.status(404).json({ message: 'User not found!' });
+            user && res.json({ message: "Success", user });
+        });
+    }
+});
+
 
 const UpdatePassword = catchError(async (req, res, next) => {
   let user = await UserModel.findById(req.user._id);
