@@ -20,7 +20,7 @@ cloudinary.config({
 
 
 
-//signUp
+
 const signUp=catchError(async(req,res,next)=>{
   cloudinary.uploader.upload(req.file.path, async(error, result) =>{
    req.body.image=result.secure_url 
@@ -32,7 +32,7 @@ const signUp=catchError(async(req,res,next)=>{
 })
 })
 
-//signIn
+
 const signIn = catchError(async (req, res, next) => {
   const { emailOrMobile,password } = req.body;
   let user = await UserModel.findOne({
@@ -57,9 +57,6 @@ const getAllUsers=catchError(async(req,res,next)=>{
  res.json({message:"Success", page : apiFeatures.pageNumber,users})})
 
   
-
-
-
 const getProfileData = catchError(async (req, res, next) => {
     let user = req.user
     !user && next(new AppError("not user found", 404));

@@ -18,7 +18,6 @@ import { UpdatePassword,
          resetPassword,
          signIn,
          signUp, 
-         updateUser,
          updateuser} from "./user.controller.js";
 import { validation } from "../../middleware/validation.js";
 import { protectRoutes } from "../../middleware/authentication.js";
