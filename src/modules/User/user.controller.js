@@ -65,6 +65,12 @@ const getProfileData = catchError(async (req, res, next) => {
     !user && next(new AppError("not user found", 404));
     user && res.json({ message: "success", user });
   });
+  cloudinary.config({ 
+    cloud_name: 'dpsp3oq9x', 
+    api_key: '435615528978193', 
+    api_secret: 'dX0u1peCmgM4jMa6xQVjfuyKL68' 
+  });
+  
 
 
 const updateUser=catchError(async(req,res,next)=>{
@@ -72,7 +78,7 @@ const updateUser=catchError(async(req,res,next)=>{
     req.body.image=result.secure_url 
     let User= await UserModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
     !User &&  res.status(404).json( {message:'User not found!'})
-    res.json({message:"Success",User})
+    User && res.json({ message: "success", User });
 })
 })
 
