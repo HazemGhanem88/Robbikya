@@ -34,9 +34,9 @@ userRouter.route("/signUp").post(uploadsinglefile('image'),validation(signUpVal)
 userRouter.route("/signIn").post(validation(signInVal), signIn);
 userRouter.route('/allusers').get(getAllUsers)
 userRouter.route("/logOut").patch(protectRoutes, allowedTo("User", "Admin"), logout);
-userRouter.route("/forgetPassword").post(validation(forgetPasswordVal), forgetPassword);
-userRouter.route("/resetPassword").post(validation(resetPasswordVal), resetPassword);
-userRouter.route("/updateUser/:id").put(validation(updateUserVal),updateuser)
+userRouter.route("/forgetPassword").post(protectRoutes,allowedTo("User","Admin"),validation(forgetPasswordVal), forgetPassword);
+userRouter.route("/resetPassword").post(protectRoutes,allowedTo("User","Admin"),validation(resetPasswordVal), resetPassword);
+userRouter.route("/updateUser/:id").put(protectRoutes,allowedTo("User","Admin"),validation(updateUserVal),updateuser)
 userRouter.route("/deleteAccount/:id").delete(protectRoutes, validation(paramsValId),allowedTo("Admin"), deleteUser);
 userRouter.route("/getUserAccountData/:id").get(protectRoutes, allowedTo("User","Admin"),validation(paramsValId), getProfileData);
 userRouter.route("/UpdatePassword").patch(protectRoutes,allowedTo("User", "Admin"),validation(UpdatePasswordVal),UpdatePassword );
