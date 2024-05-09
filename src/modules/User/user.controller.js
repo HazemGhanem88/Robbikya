@@ -68,9 +68,12 @@ const getProfileData = catchError(async (req, res, next) => {
 
 
 const updateUser=catchError(async(req,res,next)=>{
+  if(req.file) cloudinary.uploader.upload(req.file.path, async(error, result) =>{
+    req.body.image=result.secure_url 
     let User= await UserModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
     !User &&  res.status(404).json( {message:'User not found!'})
     res.json({message:"Success",User})
+})
 })
 
 const UpdatePassword = catchError(async (req, res, next) => {
