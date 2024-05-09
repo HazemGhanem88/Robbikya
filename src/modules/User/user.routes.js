@@ -35,7 +35,7 @@ userRouter.route('/allusers').get(getAllUsers)
 userRouter.route("/logOut").patch(protectRoutes, allowedTo("User", "Admin"), logout);
 userRouter.route("/forgetPassword").post(validation(forgetPasswordVal), forgetPassword);
 userRouter.route("/resetPassword").post(validation(resetPasswordVal), resetPassword);
-userRouter.route("/updateAccount/:id").put(protectRoutes,allowedTo("User", "Admin"),validation(updateUserVal,paramsValId),checkEmail,updateUser);
+userRouter.route("/updateAccount/:id").put(protectRoutes,allowedTo("User", "Admin"),validation(updateUserVal),checkEmail,updateUser);
 userRouter.route("/deleteAccount/:id").delete(protectRoutes, validation(paramsValId),allowedTo("Admin"), deleteUser);
 userRouter.route("/getUserAccountData/:id").get(protectRoutes, allowedTo("User","Admin"),validation(paramsValId), getProfileData);
 userRouter.route("/UpdatePassword").patch(protectRoutes,allowedTo("User", "Admin"),validation(UpdatePasswordVal),UpdatePassword );
