@@ -77,12 +77,13 @@ const updateProduct = catchError(async (req, res, next) => {
           const imagesUploadResults = await uploadMultipleImages(req.files.images, "products");
           req.body.images = imagesUploadResults;
       }
+    }
 
       let product = await productmodel.findByIdAndUpdate(req.params.id, req.body, { new: true });
       
       !product && res.status(404).json({ message: "Product is not found" });
       product && res.json({ message: "Success", product });
-  }
+  
 });
 
 const deleteproduct =  catchError(async(req,res,next)=>{
