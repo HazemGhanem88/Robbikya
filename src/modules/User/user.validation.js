@@ -42,6 +42,7 @@ const paramsValId = Joi.object({
 })
 
 const updateUserVal = Joi.object({
+    id: Joi.string().hex().length(24).required(),
     firstName: Joi.string().min(2).max(15).trim(),
     lastName: Joi.string().min(2).max(15).trim(),
     userName: Joi.string().min(2).lowercase().trim(),
