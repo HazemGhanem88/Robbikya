@@ -56,13 +56,12 @@ const getAllUsers=catchError(async(req,res,next)=>{
   let users= await apiFeatures.mongooseQuery
  res.json({message:"Success", page : apiFeatures.pageNumber,users})})
 
-  
-const getProfileData = catchError(async (req, res, next) => {
-    let user = req.user
-    !user && next(new AppError("not user found", 404));
-    user && res.json({ message: "success", user });
-  });
-
+ const getProfileData = catchError(async (req, res, next) => {
+  //let user = req.user;
+  const user = await UserModel.findById(req.user._id).select("-password").populate("cart");
+  !user && next(new AppError("not user found", 404));
+  user && res.json({ message: "success", user });
+});
 
   const updateuser =  catchError(async(req,res,next)=>{
     

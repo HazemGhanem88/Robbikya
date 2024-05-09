@@ -1,13 +1,20 @@
 import Router from "express";
-
 import {
   addProductToCartSchema,
+  updateProductQuantitySchema
   //getLoggedUserCartSchema,
 } from "./cart.validation.js";
 import { allowedTo } from "../../middleware/authorization.js";
 import { validation } from "../../middleware/validation.js";
 import { protectRoutes } from "../../middleware/authentication.js";
-import { addProductToCart, clearCart, getLoggedUserCart, removeSpecificCartItem, } from "./cart.controller.js";
+import {
+  addProductToCart,
+  clearCart,
+  getLoggedUserCart,
+  removeProductFromCart,
+  // removeSpecificCartItem,
+  updateProductQuantity
+} from "./cart.controller.js";
 
 const cartRouter = Router();
 
@@ -18,6 +25,13 @@ cartRouter.post(
   validation(addProductToCartSchema),
   addProductToCart
 );
+cartRouter.post(
+  "/updateProductQuantity",
+  protectRoutes,
+  allowedTo("User", "Admin"),
+  validation(updateProductQuantitySchema),
+  updateProductQuantity
+);
 cartRouter.get(
   "/getLoggedUserCart",
   protectRoutes,
@@ -27,9 +41,10 @@ cartRouter.get(
 
 cartRouter.put(
   "/removeSpecificCartItem/:productId",
-  protectRoutes,
+  protectRoutes,  
   allowedTo("User", "Admin"),
-  removeSpecificCartItem
+  // removeSpecificCartItem
+  removeProductFromCart
 );
 
 cartRouter.delete(
@@ -39,4 +54,4 @@ cartRouter.delete(
   clearCart
 );
 
-export default cartRouter
+export default cartRouter;

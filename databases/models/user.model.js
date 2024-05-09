@@ -78,6 +78,10 @@ const schema= new mongoose.Schema({
         type:mongoose.Types.ObjectId,
         ref:'product'
     }],
+    cart:{
+        type:mongoose.Types.ObjectId,
+        ref:'Cart'
+    },
    
 },
 
@@ -90,6 +94,17 @@ const schema= new mongoose.Schema({
     schema.pre('findOneAndUpdate',function(){
         // this.__update.password = bcrypt.hashSync(this.password,8)
     })
+    schema.pre('save',async function(next){
+        // this.__update.password = bcrypt.hashSync(this.password,8)
+       const cart= await cartModel.create({
+            user: this._id,
+            //we can use $addtoSet
+       
+             cartItems: [],
+           });
+           this.cart= cart._id
+    })
+    
     schema.methods.hashPass= async function (){
         this.password =await bcrypt.hash(this.password,10)
     }

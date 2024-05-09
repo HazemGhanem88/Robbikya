@@ -15,9 +15,7 @@ export const createCashOrder = asyncHandler(async (req, res, next) => {
   //1) get cart depend on cartId
   const cart = await  cartModel.findById(cartId);
   if (!cart) {
-    res
-      .status(404)
-      .json({ message: `there is no cart with id ${req.params.cartId}` });
+    res.status(404).json({ message:`there is no cart with id ${req.params.cartId}` });
   }
   //2) get order price cart price  "check if copoun applied"
   const cartPrice = cart.totalCartpriceAfterDiscount
@@ -43,8 +41,11 @@ export const createCashOrder = asyncHandler(async (req, res, next) => {
   }));
   await productmodel.bulkWrite(bulkOptions, {});
   //5)clear cart depend on cartId
-  await  cartModel.findByIdAndDelete(cartId);
-
+  //await  cartModel.findByIdAndDelete(cartId);
+cart.cartItems=[];
+cart.totalCartprice=0;
+cart.totalCartpriceAfterDiscount=0;
+await cart.save();
   res.status(201).json({ status: "success", data: order });
 });
 

@@ -18,17 +18,22 @@ const OrderRouter = Router();
 OrderRouter.post(
   "/createCashOrder/:cartId",
   protectRoutes,
-  allowedTo("User"),
+  allowedTo("Admin", "User"),
   validation(validator.createCashOrderSchema),
   createCashOrder
 );
 
-OrderRouter.get("/getAllOrders", protectRoutes, allowedTo("Admin"), getAllOrders);
+OrderRouter.get(
+  "/getAllOrders",
+  protectRoutes,
+  allowedTo("Admin", "User"),
+  getAllOrders
+);
 
 OrderRouter.get(
   "/getOrderById/:orderId",
   protectRoutes,
-  allowedTo("Admin"),
+  allowedTo("Admin", "User"),
   validation(validator.getOrderByIdSchema),
   getOrderById
 );
@@ -36,7 +41,7 @@ OrderRouter.get(
 OrderRouter.delete(
   "/deleteOrderById/:orderId",
   protectRoutes,
-  allowedTo("Admin"),
+  allowedTo("Admin", "User"),
   validation(validator.deleteOrderByIdSchema),
   deleteOrderById
 );
