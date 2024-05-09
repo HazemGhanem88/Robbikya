@@ -58,15 +58,32 @@ const getsingleproduct =  catchError(async(req,res,next)=>{
     product&&res.json({message:"suceess",product})
 })
 
-const updateproduct =  catchError(async(req,res,next)=>{
-  if(req.body.name)req.body.slug=slugify(req.body.title)
-  if(req.body.imgCover)req.body.imgCover= req.files.imgCover[0].filename 
-  if( req.body.images) req.body.images = req.files.images.map((img)=> img.filename)   
-   let product = await productmodel.findByIdAndUpdate(req.params.id , req.body , {new:true})
-   !product && res.status(404).json({message:"product is not found"})
-   product&&res.json({message:"suceess",product})
-   })
 
+cloudinary.config({ 
+  cloud_name: 'dpsp3oq9x', 
+  api_key: '435615528978193', 
+  api_secret: 'dX0u1peCmgM4jMa6xQVjfuyKL68' 
+});
+
+const updateProduct = catchError(async (req, res, next) => {
+  if (req.body.name)
+      req.body.slug = slugify(req.body.title);
+  
+  if (req.body.imgCover) { 
+      const coverUploadResult = await cloudinary.uploader.upload(req.files.imgCover[0].path);
+      req.body.imgCover = coverUploadResult.secure_url;  
+
+      if (req.files.images?.length > 0) {
+          const imagesUploadResults = await uploadMultipleImages(req.files.images, "products");
+          req.body.images = imagesUploadResults;
+      }
+
+      let product = await productmodel.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      
+      !product && res.status(404).json({ message: "Product is not found" });
+      product && res.json({ message: "Success", product });
+  }
+});
 
 const deleteproduct =  catchError(async(req,res,next)=>{
    let product = await productmodel.findByIdAndDelete(req.params.id)
@@ -84,6 +101,6 @@ export{
     addproduct,
     getallproducts,
     getsingleproduct,
-    updateproduct,
+    updateProduct,
     deleteproduct
 }

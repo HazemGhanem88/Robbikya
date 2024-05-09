@@ -46,7 +46,7 @@ const paramsproductval = Joi.object({
 
 
 const updateproductval = Joi.object({
-    
+    id: Joi.string().hex().length(24).required(),
     name: Joi.string().min(2).trim(),
     description: Joi.string().min(50).max(1500).trim(),
     price: Joi.number().min(0),
