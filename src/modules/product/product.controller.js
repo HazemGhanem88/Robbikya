@@ -67,7 +67,7 @@ cloudinary.config({
 
 const updateProduct = catchError(async (req, res, next) => {
   if (req.body.name)
-      req.body.slug = slugify(req.body.title);
+      req.body.slug = slugify(req.body.name);
   
   if (req.body.imgCover) { 
       const coverUploadResult = await cloudinary.uploader.upload(req.files.imgCover[0].path);
