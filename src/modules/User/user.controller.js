@@ -68,14 +68,16 @@ const getProfileData = catchError(async (req, res, next) => {
     api_key: '435615528978193', 
     api_secret: 'dX0u1peCmgM4jMa6xQVjfuyKL68' 
   });
+  
   const updateuser =  catchError(async(req,res,next)=>{
     if(req.file) cloudinary.uploader.upload(req.file.path, async(error, result) =>{
-      req.body.image=result.secure_url 
+      req.body.image=result.secure_url
+     })
      let user = await UserModel.findByIdAndUpdate(req.params.id , req.body , {new:true})
      !user && res.status(404).json({message:"user is not found"})
      user&&res.json({message:"suceess",user})
      })
-    })
+  
 
 const UpdatePassword = catchError(async (req, res, next) => {
   let user = await UserModel.findById(req.user._id);
