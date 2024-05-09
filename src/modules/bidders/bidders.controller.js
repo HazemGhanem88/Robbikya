@@ -11,6 +11,7 @@ const addBidders= catchError(async(req,res,next)=>{
         offerPrice:req.body.offerPrice
         }})
   }
+  
   else{
     
  await BiddersModel.findOneAndUpdate({productId:req.body.productId},{ $push: { "Bidders":  {
@@ -21,6 +22,8 @@ const addBidders= catchError(async(req,res,next)=>{
   }
   res.json({message:"Done"})
 })
+
+
 
 export{
     addBidders

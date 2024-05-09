@@ -50,31 +50,29 @@ const signIn = catchError(async (req, res, next) => {
 return next(new AppError("email or password incorrect", 401));
 })
 
-//get all users by the admin
+
 const getAllUsers=catchError(async(req,res,next)=>{
   let apiFeatures = new ApiFeatures(UserModel.find(),req.query).pagination().filter().sort().fields().search()
   let users= await apiFeatures.mongooseQuery
-   //let users= await UserModel.find({})
-  //!users&& res.status(404).json({message:"No User Found!"});
-    res.json({message:"Success", page : apiFeatures.pageNumber,users})})
+ res.json({message:"Success", page : apiFeatures.pageNumber,users})})
 
   
 
 
-//get profile data of useruser by the admin
+
 const getProfileData = catchError(async (req, res, next) => {
     let user = req.user
     !user && next(new AppError("not user found", 404));
     user && res.json({ message: "success", user });
   });
 
-//update user data
+
 const updateUser=catchError(async(req,res,next)=>{
     let User= await UserModel.findByIdAndUpdate(req.params.id,req.body,{new:true})
     !User &&  res.status(404).json( {message:'User not found!'})
     res.json({message:"Success",User})
 })
-//update user password
+
 const UpdatePassword = catchError(async (req, res, next) => {
   let user = await UserModel.findById(req.user._id);
   if (user && bcrypt.compareSync(req.body.currentPassword, user.password)) {
@@ -91,13 +89,13 @@ const UpdatePassword = catchError(async (req, res, next) => {
   }
   next(new AppError("password incorrect", 401));
 });
-//delete user account by the admin
+
 const deleteUser=catchError(async(req,res,next)=>{
     let user= await UserModel.findByIdAndDelete(req.params.id)
     if(!user) return res.status(404).json( {message:'User not found!'})
     res.json({message:"Success",user})
 })
-//get all orders for specific user
+
 const getAllUserOrders=catchError(async(req,res,next)=>{
     let userId=req.params.id
     let user=await UserModel.findById(userId)
@@ -111,7 +109,7 @@ const getAllUserOrders=catchError(async(req,res,next)=>{
 })
 
 
-  //forget password
+ 
   const forgetPassword = catchError(async (req, res, next) => {
     let user = await UserModel.findOne({ email: req.body.email });
     if (!user) return next(new AppError("not user found"));
@@ -124,7 +122,7 @@ const getAllUserOrders=catchError(async(req,res,next)=>{
     await user.save();
     res.status(200).json({ message: "success", otp });
   });
-  //Reset password using otp
+  
   const resetPassword = catchError(async (req, res, next) => {
     let user = await UserModel.findOne({ email: req.body.email });
     if (!user) return next(new AppError("not user found"));
@@ -137,7 +135,7 @@ const getAllUserOrders=catchError(async(req,res,next)=>{
     await user.hashPass();
     res.status(200).json({ message: "Password reset successfuly" });
   });
-  // logout
+  
 const logout = catchError(async (req, res, next) => {
     await UserModel.findByIdAndUpdate(req.user._id, {
       logoutAt: Date.now(),

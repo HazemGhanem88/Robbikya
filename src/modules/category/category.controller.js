@@ -41,13 +41,22 @@ const getsinglecategory =  catchError(async(req,res,next)=>{
     category&&res.json({message:"suceess",category})
 })
 
+cloudinary.config({ 
+  cloud_name: 'dpsp3oq9x', 
+  api_key: '435615528978193', 
+  api_secret: 'dX0u1peCmgM4jMa6xQVjfuyKL68' 
+});
+
+
 const updatecategory =  catchError(async(req,res,next)=>{
   if(req.body.name)  req.body.slug = slugify(req.body.name)
-  if(req.file)  req.body.image = req.file.filename  
+  if(req.file) cloudinary.uploader.upload(req.file.path, async(error, result) =>{
+    req.body.image=result.secure_url 
    let category = await categorymodel.findByIdAndUpdate(req.params.id , req.body , {new:true})
    !category && res.status(404).json({message:"category is not found"})
    category&&res.json({message:"suceess",category})
    })
+  })
 
 
 const deletecategory =  catchError(async(req,res,next)=>{
@@ -69,3 +78,5 @@ export{
     updatecategory,
     deletecategory
 }
+
+
