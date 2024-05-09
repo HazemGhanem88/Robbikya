@@ -41,20 +41,20 @@ const paramsValId = Joi.object({
     id: Joi.string().hex().length(24).required(),
 })
 
-const updateUserVal = Joi.object({
+const userUpadteval = Joi.object({
     id: Joi.string().hex().length(24).required(),
-    firstName: Joi.string().min(2).max(15).trim(),
-    lastName: Joi.string().min(2).max(15).trim(),
+    firstName: Joi.string().trim().min(2).max(15),
+    lastName: Joi.string().trim().min(2).max(15),
     userName: Joi.string().min(2).lowercase().trim(),
     email: Joi.string().pattern(/[A-Za-z0-9]{3,50}@(gmail|yahoo).com$/),
     Age: Joi.number().integer().positive(),
-    password: Joi.string().pattern(/^[a-zA-Z0-9]{3,30}$/),
-    repassword: Joi.valid(Joi.ref('password')),
     address: Joi.string().min(2).trim(),
+    password: Joi.string().pattern(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/),
+    rePassword: Joi.valid(Joi.ref("password")),
     DOB: Joi.string().pattern(/^\d{4}-\d{1,2}-\d{1,2}$/).trim(),
     phone: Joi.string().pattern(/^01[0125][0-9]{8}$/),
     Gender:Joi.string(),
-    role:Joi.string().valid('User','Admin'),
+    role:Joi.string().valid('User','Admin').optional(),
     image:Joi.object({
       fieldname:Joi.string().required(),
       originalname:Joi.string().required() ,
@@ -66,8 +66,9 @@ const updateUserVal = Joi.object({
       path:Joi.string().required(),
       
 
-      })
-})
+      }),
+    })
+
 const forgetPasswordVal = Joi.object({
   email: Joi.string().pattern(/[A-Za-z0-9]{3,50}@(gmail|yahoo).com$/).required(),
 });
@@ -91,7 +92,7 @@ const UpdatePasswordVal = Joi.object({
 export {
     signUpVal,
     signInVal,
-    updateUserVal,
+    userUpadteval,
     forgetPasswordVal,
     resetPasswordVal,
     UpdatePasswordVal,

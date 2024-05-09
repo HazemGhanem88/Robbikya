@@ -5,7 +5,7 @@ import { UpdatePasswordVal,
          resetPasswordVal,
          signInVal,
          signUpVal,
-         updateUserVal, 
+         userUpadteval, 
                } from "./user.validation.js";
 
 import { UpdatePassword, 
@@ -36,7 +36,7 @@ userRouter.route('/allusers').get(getAllUsers)
 userRouter.route("/logOut").patch(protectRoutes, allowedTo("User", "Admin"), logout);
 userRouter.route("/forgetPassword").post(protectRoutes,allowedTo("User","Admin"),validation(forgetPasswordVal), forgetPassword);
 userRouter.route("/resetPassword").post(protectRoutes,allowedTo("User","Admin"),validation(resetPasswordVal), resetPassword);
-userRouter.route("/updateUser/:id").put(protectRoutes,allowedTo("User","Admin"),validation(updateUserVal),updateuser)
+userRouter.route("/updateUser/:id").put(protectRoutes,allowedTo("User","Admin"),validation(userUpadteval),updateuser)
 userRouter.route("/deleteAccount/:id").delete(protectRoutes, validation(paramsValId),allowedTo("Admin"), deleteUser);
 userRouter.route("/getUserAccountData/:id").get(protectRoutes, allowedTo("User","Admin"),validation(paramsValId), getProfileData);
 userRouter.route("/UpdatePassword").patch(protectRoutes,allowedTo("User", "Admin"),validation(UpdatePasswordVal),UpdatePassword );
