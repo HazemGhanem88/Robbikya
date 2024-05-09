@@ -71,19 +71,19 @@ const updateProduct = catchError(async (req, res, next) => {
   
   if (req.body.imgCover) { 
       const coverUploadResult = await cloudinary.uploader.upload(req.files.imgCover[0].path);
-      req.body.imgCover = coverUploadResult.secure_url;  
+      req.body.imgCover = coverUploadResult.secure_url;  }
 
       if (req.files.images?.length > 0) {
           const imagesUploadResults = await uploadMultipleImages(req.files.images, "products");
           req.body.images = imagesUploadResults;
       }
-    }
+    
 
       let product = await productmodel.findByIdAndUpdate(req.params.id, req.body, { new: true });
       
       !product && res.status(404).json({ message: "Product is not found" });
       product && res.json({ message: "Success", product });
-  
+    
 });
 
 const deleteproduct =  catchError(async(req,res,next)=>{
