@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt"
+import { cartModel } from "./cart.model.js";
 const schema= new mongoose.Schema({
     firstName:{
         type:String,
