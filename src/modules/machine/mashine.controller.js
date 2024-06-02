@@ -1,3 +1,4 @@
+import { catchError } from "../../middleware/catchError.js";
 import ImageClassifier from "../../utils/Image_Classifier.js";
 // Usage example:
 const classifier = new ImageClassifier();
