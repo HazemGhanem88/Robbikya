@@ -1,7 +1,7 @@
 import { protectRoutes } from "../../middleware/authentication.js";
 import { allowedTo } from "../../middleware/authorization.js";
 import { addPhoto } from "./mashine.controller.js";
-
+import express from "express"
 
 
 
