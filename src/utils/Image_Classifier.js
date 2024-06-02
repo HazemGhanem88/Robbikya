@@ -2,7 +2,7 @@ import tf from "@tensorflow/tfjs-node";
 import {Image ,createCanvas} from "canvas";
 import fs from "fs";
 
-export class ImageClassifier {
+export  default class ImageClassifier {
   constructor() {
     this.model = null;
     this.modelPromise = this.loadModel(); // Save the promise when initializing
