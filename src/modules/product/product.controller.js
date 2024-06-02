@@ -47,6 +47,7 @@ const getallproducts =  catchError(async(req,res,next)=>{
        
   let apiFeatures = new ApiFeatures(productmodel.find(),req.query).pagination().filter().sort().fields().search()
   let products= await apiFeatures.mongooseQuery
+
     
     res.json({message:"suceess",page : apiFeatures.pageNumber,products})
 
@@ -54,6 +55,7 @@ const getallproducts =  catchError(async(req,res,next)=>{
 
 const getsingleproduct =  catchError(async(req,res,next)=>{   
     let product= await productmodel.findById(req.params.id)
+    
     !product && res.status(404).json({message:"product is not found"})
     product&&res.json({message:"suceess",product})
 })
