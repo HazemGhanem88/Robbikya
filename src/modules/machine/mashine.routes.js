@@ -1,5 +1,6 @@
-const { protectRoutes } = require("../../middleware/authentication.js");
-const { allowedTo } = require("../../middleware/authorization.js");
+import { protectRoutes } from "../../middleware/authentication.js";
+import { allowedTo } from "../../middleware/authorization.js";
+
 const { addPhoto } = require("./mashine.controller.js");
 
 
