@@ -16,26 +16,12 @@ const removefavoritepage = catchError(async(req,res,next)=>{
 
 
 
-// const getuserfavoritepage = catchError(async(req,res,next)=>{
-//     let favoritepage= await UserModel.findById(req.user._id)
-//     !favoritepage && res.status(403).json({message:"No favoritepage found"})
-    
-//     favoritepage && res.json({message:"success",favoritepage:favoritepage.product})
-// })
-const getuserfavoritepage = catchError(async (req, res, next) => {
-    try {
-        const favoritepage = await UserModel.findById(req.user._id).populate('product');
-        
-        if (!favoritepage) {
-            return res.status(403).json({ message: "No favorite page found" });
-        }
-        
-        res.json({ message: "Success", favoritepage });
-    } catch (error) {
-        console.error("Error:", error);
-        res.status(500).json({ error: "An error occurred" });
-    }
-});
+const getuserfavoritepage = catchError(async(req,res,next)=>{
+    let favoritepage= await UserModel.findById(req.user._id).populate('product');
+    !favoritepage && res.status(403).json({message:"No favoritepage found"})
+    favoritepage && res.json({message:"success",favoritepage})
+})
+
 
 
 
