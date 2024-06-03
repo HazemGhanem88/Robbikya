@@ -73,20 +73,20 @@ cloudinary.config({
 
 const addPhoto = async (req, res, next) => {
   try {
-      // Upload image to Cloudinary
+     
       const uploadResult = await cloudinary.uploader.upload(req.file.path);
       req.body.image = uploadResult.secure_url;
 
-      // Classify image
+      
       const classifier = new ImageClassifier();
       const classificationResult = await classifier.classifyImage(req.body.image);
 
-      // Send response
+      
       res.json({
           message: `The highest probability prediction is ${classificationResult.className} with a probability of ${(classificationResult.probability * 100).toFixed(2)}%`
       });
   } catch (error) {
-      // Handle errors
+      
       console.error("Error:", error);
       res.status(500).json({ error: "An error occurred" });
   }
