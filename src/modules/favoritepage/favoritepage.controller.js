@@ -17,7 +17,7 @@ const removefavoritepage = catchError(async(req,res,next)=>{
 
 
 const getuserfavoritepage = catchError(async(req,res,next)=>{
-    let favoritepage= await UserModel.findById(req.user._id).populate('favoritepage')
+    let {favoritepage}= await UserModel.findById(req.user._id).populate('favoritepage')
     !favoritepage && res.status(403).json({message:"No favoritepage found"})
     favoritepage && res.json({message:"success",favoritepage})
 })
