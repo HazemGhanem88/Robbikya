@@ -27,6 +27,7 @@ const signUp=catchError(async(req,res,next)=>{
     let user= await UserModel.create(req.body)
    await user.hashPass()
    //await user.save()
+   console.log(user)
    let token=Jwt.sign({userId:user._id,role:user.role},"FUCK_YOU");
     res.status(201).json({ message: "success" ,user:user._id,token});
 })
