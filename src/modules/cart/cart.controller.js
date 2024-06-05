@@ -2,16 +2,47 @@ import asyncHandler from "express-async-handler";
 import { productmodel } from "../../../databases/models/product.model.js";
 import { cartModel } from "../../../databases/models/cart.model.js";
 import  {isValidObjectId}  from "mongoose";
-const calculateTotalCartPrice = (cart) => {
-  let totalPrice = 0;
+//const calculateTotalCartPrice = (cart) => {
+//   let totalPrice = 0;
 
-  cart.cartItems.forEach((item) => {
-    totalPrice += item.price * item.quantity;
-  });
-  cart.totalCartprice = totalPrice;
-  cart.totalCartpriceAfterDiscount = undefined;
-  return totalPrice;
-};
+//   cart.cartItems.forEach((item) => {
+//     totalPrice += item.price * item.quantity;
+//   });
+//   cart.totalCartprice = totalPrice;
+//   cart.totalCartpriceAfterDiscount = undefined;
+//   return totalPrice;
+// };
+
+
+const calculateTotalCartPrice = (cart) =>{
+  let totalPrice = 0
+      cart.cartItems.forEach((item)=>{
+        totalPrice+= item.quantity * item.price} )
+        cart.totalPrice=totalPrice
+        if(cart.discount){
+          let totalPriceAfterDiscount = cart.totalPrice - (cart.totalPrice * cart.discount)/100
+          cart.totalPriceAfterDiscount = totalPriceAfterDiscount
+         
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //@desc add product to cart
 //@route POST
@@ -154,7 +185,7 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 // };
 
 export const removeProductFromCart =(async(req,res,next)=>{
-  let cart =await cartModel.findOneAndUpdate({user:req.user._id} , {$pull:{cartItems: {_id:req.params.id}}},{new : true})
+  let cart =await cartModel.findOneAndUpdate({user:req.user._id} ,{$pull:{cartItems: {_id:req.params.id}}},{new : true})
 
   calculateTotalCartPrice(cart)
  await cart.save()
