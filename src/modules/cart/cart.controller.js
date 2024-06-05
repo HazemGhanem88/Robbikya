@@ -299,9 +299,11 @@
 
 
 
+import { cartModel } from "../../../databases/models/cart.model.js"
+import { productmodel } from "../../../databases/models/product.model.js"
 import { catchError } from "../../middleware/catchError.js"
-import { cartmodel } from "../../../database/models/cart.model.js"
-import { productmodel } from "../../../database/models/product.model.js"
+
+
 import { AppError } from "../../utils/AppError.js"
 
 const calcTotalprice = (cart) =>{
@@ -324,9 +326,9 @@ if(req.body.quantity>product.quantity) return next(new AppError('sold out'))
 req.body.price = product.price
 
 
-    let cartisExist = await cartmodel.findOne({user:req.user._id})
+    let cartisExist = await cartModel.findOne({user:req.user._id})
      if(!cartisExist){
-      let cart = new cartmodel({
+      let cart = new cartModel({
         user : req.user._id,
         cartItems:[req.body]
       })
@@ -363,7 +365,7 @@ const  removeProductFromCart =catchError(async(req,res,next)=>{
 
 
 const   updateProductQuantity =catchError(async(req,res,next)=>{
-  let cart =await cartmodel.findOne({user:req.user._id}) 
+  let cart =await cartModel.findOne({user:req.user._id}) 
   !cart&&res.status(401).json({error:"cart not found"});
   let item =  cart.cartItems.find((item)=>item._id == req.params.id)
   if(!item) return next(new AppError("item not found ",404))
@@ -376,7 +378,7 @@ const   updateProductQuantity =catchError(async(req,res,next)=>{
 })
 
 const  getLoggedUserCart = catchError(async(req,res,next)=>{
-  let cart = await cartmodel.findOne({user:req.user._id}).populate('cartItems.product')
+  let cart = await cartModel.findOne({user:req.user._id}).populate('cartItems.product')
   !cart&&res.status(401).json({error:"cart not found"})
   cart && res.json({message:"founded cart",cart})
 
@@ -384,7 +386,7 @@ const  getLoggedUserCart = catchError(async(req,res,next)=>{
 
 
 const  clearCart = catchError(async(req,res,next)=>{
-  let cart = await cartmodel.findOneAndDelete({user:req.user._id})
+  let cart = await cartModel.findOneAndDelete({user:req.user._id})
   !cart&&res.status(401).json({error:"cart not found"})
   cart && res.json({message:"founded cart",cart})
 
