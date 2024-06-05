@@ -16,7 +16,7 @@ const schema = new mongoose.Schema(
       },
     ],
     totalCartprice: Number,
-    totalCartpriceAfterDiscount: Number,
+    //totalCartpriceAfterDiscount: Number,
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
