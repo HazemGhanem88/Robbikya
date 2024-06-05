@@ -24,10 +24,11 @@ cloudinary.config({
 const signUp=catchError(async(req,res,next)=>{
   cloudinary.uploader.upload(req.file.path, async(error, result) =>{
    req.body.image=result.secure_url 
-    let user= new UserModel
+    let user= new UserModel(req.body)
+    console.log(user)
    await user.hashPass()
-   //await user.save()
-   console.log(user)
+   await user.save()
+   //console.log(user)
    let token=Jwt.sign({userId:user._id,role:user.role},"FUCK_YOU");
     res.status(201).json({ message: "success" ,user:user._id,token});
 })
@@ -39,6 +40,7 @@ const signIn = catchError(async (req, res, next) => {
   let user = await UserModel.findOne({
     $or: [{ email: emailOrMobile }, { mobileNumber: emailOrMobile }],
   });
+  console.log(user)
   if (user && bcrypt.compareSync(password, user.password)) {
     await UserModel.findByIdAndUpdate(user._id, { status: "online" });
     let token = Jwt.sign(
