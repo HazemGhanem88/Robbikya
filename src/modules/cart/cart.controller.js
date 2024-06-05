@@ -30,7 +30,7 @@ const calculateTotalCartPrice = (cart) =>{
 
 export const addProductToCart= (async(req,res,next)=>{
 
-  let product = await productmodel.findById(req.body.product)
+  let product = await productmodel.findById(req.body.productId)
   if(!product) return next(new AppError('product not found ',404))
   
   
