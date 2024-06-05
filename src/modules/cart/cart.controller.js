@@ -27,6 +27,44 @@ const calculateTotalCartPrice = (cart) =>{
 }
 
 
+export const addProductToCart= (async(req,res,next)=>{
+
+  let product = await productmodel.findById(req.body.product)
+  if(!product) return next(new AppError('product not found ',404))
+  
+  
+  if(req.body.quantity>product.quantity) return next(new AppError('sold out'))
+  
+  req.body.price = product.price
+  
+  
+      let cartisExist = await cartModel.findOne({user:req.user._id})
+       if(!cartisExist){
+        let cart = new cartModel({
+          user : req.user._id,
+          cartItems:[req.body]
+        })
+        calculateTotalCartPrice (cart);
+        await cart.save()
+        !cart&&res.status(401).json({error:"cart not found"});
+        cart && res.json({message:"founded cart",cart})
+  
+       }
+       else{
+  
+  
+        let item = cartisExist.cartItems.find((item)=>item.product == req.body.product)
+        if(item){
+          if(item.quantity>=product.quantity) return next(new AppError('sold out'))
+          item.quantity += req.body.quantity || 1
+        }
+        else cartisExist.cartItems.push(req.body)
+  
+        calculateTotalCartPrice (cartisExist)
+        await cartisExist.save()
+        res.json({message:'success',cart: cartisExist})
+       }
+  })
 
 
 
@@ -47,65 +85,65 @@ const calculateTotalCartPrice = (cart) =>{
 //@desc add product to cart
 //@route POST
 //@access private/User
-export const addProductToCart = asyncHandler(async (req, res, next) => {
-  const { productId, quantity } = req.body;
+// export const addProductToCart = asyncHandler(async (req, res, next) => {
+//   const { productId, quantity } = req.body;
 
-  const product = await productmodel.findById(productId);
-  if (!product) {
-    res.status(404).json({ message: "Product Not Found" });
-  }
+//   const product = await productmodel.findById(productId);
+//   if (!product) {
+//     res.status(404).json({ message: "Product Not Found" });
+//   }
 
-  const productPrice = product.price;
-  //get cart for logged in user
-  let cart = await cartModel.findOne({ user: req.user._id,_id: req.user.cart });
-  //if no cart
-  // if (!cart) {
-  //   //create a new cart for this user with the product
-  //   cart = await cartModel.create({
-  //     user: req.user._id,
-  //     //we can use $addtoSet
+//   const productPrice = product.price;
+//   //get cart for logged in user
+//   let cart = await cartModel.findOne({ user: req.user._id,_id: req.user.cart });
+//   //if no cart
+//   // if (!cart) {
+//   //   //create a new cart for this user with the product
+//   //   cart = await cartModel.create({
+//   //     user: req.user._id,
+//   //     //we can use $addtoSet
 
-  //     cartItems: [{ product: productId, price: productPrice }],
-  //   });
-  // } else {
-    // is this product exists in the cart,update product quantity
-    const productIndex = cart.cartItems.findIndex(
-      (item) => item.product.toString() === productId
-    );
-    //find index if there is no item with this productid and color it will return -1
-    //if productIndex > -1 then he found a product with  this productid and color  then i will update the quantity
-    const qty = Number(quantity) || 0;
-    if(qty>=1&&product.toJSON()?.quantity - qty < 0) throw new Error("max quantity is "+ product.toJSON()?.quantity)
+//   //     cartItems: [{ product: productId, price: productPrice }],
+//   //   });
+//   // } else {
+//     // is this product exists in the cart,update product quantity
+//     const productIndex = cart.cartItems.findIndex(
+//       (item) => item.product.toString() === productId
+//     );
+//     //find index if there is no item with this productid and color it will return -1
+//     //if productIndex > -1 then he found a product with  this productid and color  then i will update the quantity
+//     const qty = Number(quantity) || 0;
+//     if(qty>=1&&product.toJSON()?.quantity - qty < 0) throw new Error("max quantity is "+ product.toJSON()?.quantity)
 
-    if (productIndex > -1) {
-      const cartItem = cart.cartItems[productIndex];
+//     if (productIndex > -1) {
+//       const cartItem = cart.cartItems[productIndex];
       
       
-      const productQty = qty ? qty || 1 : cart.cartItems[productIndex].quantity + 1
-      console.log(product.toJSON()?.quantity);  
+//       const productQty = qty ? qty || 1 : cart.cartItems[productIndex].quantity + 1
+//       console.log(product.toJSON()?.quantity);  
 
-      if(product.toJSON()?.quantity - productQty < 0) throw new Error("max quantity is "+ product.toJSON()?.quantity)
-            cartItem.quantity = productQty;
-      // add this item to cart in his index
-      cart.cartItems[productIndex] = cartItem;
-    } else {
-      //if the product is not exist in the cart ,push product to cartItem array
-      cart.cartItems.push({ product: productId, price: productPrice, quantity: qty?qty:1 });
-    }
-  //}
+//       if(product.toJSON()?.quantity - productQty < 0) throw new Error("max quantity is "+ product.toJSON()?.quantity)
+//             cartItem.quantity = productQty;
+//       // add this item to cart in his index
+//       cart.cartItems[productIndex] = cartItem;
+//     } else {
+//       //if the product is not exist in the cart ,push product to cartItem array
+//       cart.cartItems.push({ product: productId, price: productPrice, quantity: qty?qty:1 });
+//     }
+//   //}
 
-  //calculate total cart price
-  calculateTotalCartPrice(cart);
+//   //calculate total cart price
+//   calculateTotalCartPrice(cart);
 
-  await cart.save();
+//   await cart.save();
 
-  res.status(200).json({
-    status: "success",
-    numberOfCartItems: cart.cartItems.length,
-    message: "product added to cart successfully",
-    data: cart,
-  });
-});
+//   res.status(200).json({
+//     status: "success",
+//     numberOfCartItems: cart.cartItems.length,
+//     message: "product added to cart successfully",
+//     data: cart,
+//   });
+// });
 
 //@desc get logged user cart
 //@route GET
