@@ -24,7 +24,7 @@ cloudinary.config({
 const signUp=catchError(async(req,res,next)=>{
   cloudinary.uploader.upload(req.file.path, async(error, result) =>{
    req.body.image=result.secure_url 
-    let user= await UserModel.create(req.body)
+    let user= new UserModel
    await user.hashPass()
    //await user.save()
    console.log(user)
