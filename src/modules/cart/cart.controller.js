@@ -36,7 +36,7 @@ export const addProductToCart= (async(req,res,next)=>{
   
   if(req.body.quantity>product.quantity) return next(new AppError('sold out'))
   
-  req.body.price = product.price
+    req.body.price = product.price
   
   
       let cartisExist = await cartModel.findOne({user:req.user._id})
@@ -45,7 +45,7 @@ export const addProductToCart= (async(req,res,next)=>{
           user : req.user._id,
           cartItems:[req.body]
         })
-        calculateTotalCartPrice (cart);
+        calculateTotalCartPrice(cart);
         await cart.save()
         !cart&&res.status(401).json({error:"cart not found"});
         cart && res.json({message:"founded cart",cart})
@@ -61,7 +61,7 @@ export const addProductToCart= (async(req,res,next)=>{
         }
         else cartisExist.cartItems.push(req.body)
   
-        calculateTotalCartPrice (cartisExist)
+        calculateTotalCartPrice(cartisExist)
         await cartisExist.save()
         res.json({message:'success',cart: cartisExist})
        }
@@ -225,7 +225,6 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 
 export const removeProductFromCart =(async(req,res,next)=>{
     let cart =await cartModel.findOneAndUpdate({user:req.user._id},{$pull:{cartItems:{_id:req.params.id}}},{new : true})
-  
     calculateTotalCartPrice (cart)
      await cart.save()
     !cart&&res.status(401).json({error:"cart not found"});
