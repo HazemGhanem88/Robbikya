@@ -153,7 +153,7 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 //   });
 // };
 
-export const removeProductFromCart =catchError(async(req,res,next)=>{
+export const removeProductFromCart =(async(req,res,next)=>{
   let cart =await cartModel.findOneAndUpdate({user:req.user._id} , {$pull:{cartItems: {_id:req.params.id}}},{new : true})
 
   calcTotalprice(cart)
