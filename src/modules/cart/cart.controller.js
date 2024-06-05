@@ -117,45 +117,53 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 // });
 
 export const removeProductFromCart = async (req, res, next) => {
-  // * destructure data from authUser
-  const { productId } = req.params;
-  // const { _id } = req.authUser;
-  console.log(req.user._id);
-  // * check Cart
-  const userCart = await cartModel.findOne({
-    user: req.user._id,
-    "cartItems.product": productId,
-  });
-  if (!userCart) {
-    return next({ message: "Cart not found", cause: 404 });
+  try {
+    // Destructure product id from request parameters
+    const { productId } = req.params;
+
+    // Find the user's cart by their id and the product id
+    const userCart = await cartModel.findOne({
+      user: req.user._id,
+      "cartItems.product": productId,
+    });
+
+    // If user's cart not found, return error
+    if (!userCart) {
+      return next({ message: "Cart not found", cause: 404 });
+    }
+
+    // Remove the product from the cart
+    userCart.cartItems = userCart.cartItems.filter(
+      (product) => product.product.toString() !== productId
+    );
+
+    // Recalculate subtotal
+    userCart.subTotal = calculateTotalCartPrice(userCart);
+
+    // Save changes to the cart
+    const newCart = await userCart.save();
+
+    // If cart becomes empty, delete it
+    if (newCart.cartItems.length === 0) {
+      await cartModel.findByIdAndDelete(newCart._id);
+    }
+
+    // Respond with success message and updated cart data
+    res.status(200).json({
+      success: true,
+      message: "Product deleted from cart successfully",
+      data: newCart,
+    });
+  } catch (error) {
+    // Pass errors to the error handling middleware
+    next(error);
   }
-
-  // * remove product from cart
-  userCart.cartItems = userCart.cartItems.filter(
-    (product) => product.product.toString() !== productId
-  );
-
-  userCart.subTotal = calculateTotalCartPrice(userCart);
-
-  // * save changes
-  const newCart = await userCart.save();
-
-  // * check if cart is empty
-  if (newCart.cartItems.length === 0) {
-    await cartModel.findByIdAndDelete(newCart._id);
-  }
-
-  // * response successfully
-  res.status(200).json({
-    success: true,
-    message: "product deleted from cart successfully",
-    data: newCart,
-  });
 };
 
-//@desc clear all items from cart
-//@route DELETE
-//@access private/User
+/**
+ * Calculate the total price of items in the cart.
+
+
 export const clearCart = asyncHandler(async (req, res, next) => {
   const cart = await cartModel.updateOne({ user: req.user._id.valueOf() },{cartItems:[],totalCartprice: 0,
     totalCartpriceAfterDiscount: 0});
@@ -218,3 +226,43 @@ export const updateProductQuantity = asyncHandler(async (req, res, next) => {
     data: cart,
   });
 });
+
+
+
+
+// export const removeProductFromCart = async (req, res, next) => {
+//   // * destructure data from authUser
+//   const { productId } = req.params;
+//   // const { _id } = req.authUser;
+//   console.log(req.user._id);
+//   // * check Cart
+//   const userCart = await cartModel.findOne({
+//     user: req.user._id,
+//     "cartItems.product": productId,
+//   });
+//   if (!userCart) {
+//     return next({ message: "Cart not found", cause: 404 });
+//   }
+
+//   // * remove product from cart
+//   userCart.cartItems = userCart.cartItems.filter(
+//     (product) => product.product.toString() !== productId
+//   );
+
+//   userCart.subTotal = calculateTotalCartPrice(userCart);
+
+//   // * save changes
+//   const newCart = await userCart.save();
+
+//   // * check if cart is empty
+//   if (newCart.cartItems.length === 0) {
+//     await cartModel.findByIdAndDelete(newCart._id);
+//   }
+
+//   // * response successfully
+//   res.status(200).json({
+//     success: true,
+//     message: "product deleted from cart successfully",
+//     data: newCart,
+//   });
+// };
