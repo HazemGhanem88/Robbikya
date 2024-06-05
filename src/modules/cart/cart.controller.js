@@ -224,14 +224,14 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 // };
 
 export const removeProductFromCart =(async(req,res,next)=>{
-  let cart =await cartModel.findOneAndUpdate({user:req.user._id} ,{$pull:{cartItems: {_id:req.params.id}}},{new : true})
-
-  calculateTotalCartPrice(cart)
- await cart.save()
-  !cart&&res.status(401).json({error:"cart not found"});
-  cart && res.json({message:"founded cart",cart})
-})
-
+    let cart =await cartModel.findOneAndUpdate({user:req.user._id},{$pull:{cartItems:{_id:req.params.id}}},{new : true})
+  
+    calculateTotalCartPrice (cart)
+     await cart.save()
+    !cart&&res.status(401).json({error:"cart not found"});
+    cart && res.json({message:"founded cart",cart})
+  })
+  
 
 
 //@desc clear all items from cart
