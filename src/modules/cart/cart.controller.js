@@ -302,8 +302,6 @@
 import { cartModel } from "../../../databases/models/cart.model.js"
 import { productmodel } from "../../../databases/models/product.model.js"
 import { catchError } from "../../middleware/catchError.js"
-
-
 import { AppError } from "../../utils/AppError.js"
 
 const calcTotalprice = (cart) =>{
@@ -311,7 +309,11 @@ const calcTotalprice = (cart) =>{
       cart.cartItems.forEach((item)=>{
         totalPrice+= item.quantity * item.price} )
         cart.totalPrice=totalPrice
-     
+        if(cart.discount){
+          let totalPriceAfterDiscount = cart.totalPrice - (cart.totalPrice * cart.discount)/100
+          cart.totalPriceAfterDiscount = totalPriceAfterDiscount
+         
+        }
 }
 
 
@@ -354,8 +356,8 @@ req.body.price = product.price
      }
 })
 
-const  removeProductFromCart =catchError(async(req,res,next)=>{
-  let cart =await cartmodel.findOneAndUpdate({user:req.user._id} , {$pull:{cartItems: {_id:req.params.id}}},{new : true})
+const removeProductFromCart =catchError(async(req,res,next)=>{
+  let cart =await cartModel.findOneAndUpdate({user:req.user._id} , {$pull:{cartItems: {_id:req.params.id}}},{new : true})
 
   calcTotalprice(cart)
  await cart.save()
@@ -364,7 +366,7 @@ const  removeProductFromCart =catchError(async(req,res,next)=>{
 })
 
 
-const   updateProductQuantity =catchError(async(req,res,next)=>{
+const updateProductQuantity =catchError(async(req,res,next)=>{
   let cart =await cartModel.findOne({user:req.user._id}) 
   !cart&&res.status(401).json({error:"cart not found"});
   let item =  cart.cartItems.find((item)=>item._id == req.params.id)
@@ -385,7 +387,7 @@ const  getLoggedUserCart = catchError(async(req,res,next)=>{
 })
 
 
-const  clearCart = catchError(async(req,res,next)=>{
+const clearcart = catchError(async(req,res,next)=>{
   let cart = await cartModel.findOneAndDelete({user:req.user._id})
   !cart&&res.status(401).json({error:"cart not found"})
   cart && res.json({message:"founded cart",cart})
@@ -399,5 +401,5 @@ export{
   removeProductFromCart,
   updateProductQuantity,
   getLoggedUserCart,
-  clearCart 
+  clearcart, 
 }
