@@ -117,13 +117,41 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 // });
 
 export const removeProductFromCart = async (req, res, next) => {
-  let cart =await cartModel.findOneAndUpdate({user:req.user._id},{$pull:{cartItems:{_id:req.params.id}}},{new : true})
+  // * destructure data from authUser
+  const { productId } = req.params;
+  // const { _id } = req.authUser;
+  console.log(req.user._id);
+  // * check Cart
+  const userCart = await cartModel.findOne({
+    user: req.user._id,
+    "cartItems.product": productId,
+  });
+  if (!userCart) {
+    return next({ message: "Cart not found", cause: 404 });
+  }
 
-  calculateTotalCartPrice(cart);
- await cart.save()
-  !cart&&res.status(401).json({error:"cart not found"});
-  cart && res.json({message:"founded cart",cart})
-}
+  // * remove product from cart
+  userCart.cartItems = userCart.cartItems.filter(
+    (product) => product.product.toString() !== productId
+  );
+
+  userCart.subTotal = calculateTotalCartPrice(userCart);
+
+  // * save changes
+  const newCart = await userCart.save();
+
+  // * check if cart is empty
+  if (newCart.cartItems.length === 0) {
+    await cartModel.findByIdAndDelete(newCart._id);
+  }
+
+  // * response successfully
+  res.status(200).json({
+    success: true,
+    message: "product deleted from cart successfully",
+    data: newCart,
+  });
+};
 
 
     // Respond with success message and updated cart data
@@ -211,39 +239,3 @@ export const updateProductQuantity = asyncHandler(async (req, res, next) => {
 
 
 
-// export const removeProductFromCart = async (req, res, next) => {
-//   // * destructure data from authUser
-//   const { productId } = req.params;
-//   // const { _id } = req.authUser;
-//   console.log(req.user._id);
-//   // * check Cart
-//   const userCart = await cartModel.findOne({
-//     user: req.user._id,
-//     "cartItems.product": productId,
-//   });
-//   if (!userCart) {
-//     return next({ message: "Cart not found", cause: 404 });
-//   }
-
-//   // * remove product from cart
-//   userCart.cartItems = userCart.cartItems.filter(
-//     (product) => product.product.toString() !== productId
-//   );
-
-//   userCart.subTotal = calculateTotalCartPrice(userCart);
-
-//   // * save changes
-//   const newCart = await userCart.save();
-
-//   // * check if cart is empty
-//   if (newCart.cartItems.length === 0) {
-//     await cartModel.findByIdAndDelete(newCart._id);
-//   }
-
-//   // * response successfully
-//   res.status(200).json({
-//     success: true,
-//     message: "product deleted from cart successfully",
-//     data: newCart,
-//   });
-// };
