@@ -117,48 +117,17 @@ export const getLoggedUserCart = asyncHandler(async (req, res, next) => {
 // });
 
 export const removeProductFromCart = async (req, res, next) => {
-  try {
-    // Destructure product id from request parameters
-    const { productId } = req.params;
+  let cart =await cartModel.findOneAndUpdate({user:req.user._id},{$pull:{cartItems:{_id:req.params.id}}},{new : true})
 
-    // Find the user's cart by their id and the product id
-    const userCart = await cartModel.findOne({
-      user: req.user._id,
-      "cartItems.product": productId,
-    });
+  calculateTotalCartPrice(cart);
+ await cart.save()
+  !cart&&res.status(401).json({error:"cart not found"});
+  cart && res.json({message:"founded cart",cart})
+}
 
-    // If user's cart not found, return error
-    if (!userCart) {
-      return next({ message: "Cart not found", cause: 404 });
-    }
-
-    // Remove the product from the cart
-    userCart.cartItems = userCart.cartItems.filter(
-      (product) => product.product.toString() !== productId
-    );
-
-    // Recalculate subtotal
-    userCart.subTotal = calculateTotalCartPrice(userCart);
-
-    // Save changes to the cart
-    const newCart = await userCart.save();
-
-    // If cart becomes empty, delete it
-    if (newCart.cartItems.length === 0) {
-      await cartModel.findByIdAndDelete(newCart._id);
-    }
 
     // Respond with success message and updated cart data
-    res.status(200).json({
-      success: true,
-      message: "Product deleted from cart successfully",
-      data: newCart,
-    });
-  } catch (error) {
-    // Pass errors to the error handling middleware
-    next(error);
-  }
-};
+   
 
 /**
  * Calculate the total price of items in the cart.
