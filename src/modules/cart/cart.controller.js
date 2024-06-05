@@ -162,8 +162,20 @@ export const removeProductFromCart = async (req, res, next) => {
 
 /**
  * Calculate the total price of items in the cart.
-
-
+//  * @param {Object} cart - The cart object.
+//  * @returns {Number} - The total price.
+//  */
+// const calculateTotalCartPrice = (cart) => {
+//   // Implement the logic to calculate total cart price here
+//   let total = 0;
+//   for (const item of cart.cartItems) {
+//     total += item.price * item.quantity;
+//   }
+//   return total;
+// };
+//@desc clear all items from cart
+//@route DELETE
+//@access private/User
 export const clearCart = asyncHandler(async (req, res, next) => {
   const cart = await cartModel.updateOne({ user: req.user._id.valueOf() },{cartItems:[],totalCartprice: 0,
     totalCartpriceAfterDiscount: 0});
