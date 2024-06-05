@@ -39,7 +39,7 @@ cartRouter.get(
   getLoggedUserCart
 );
 
-cartRouter.put(
+cartRouter.delete(
   "/removeSpecificCartItem/:productId",
   protectRoutes,  
   allowedTo("User", "Admin"),
