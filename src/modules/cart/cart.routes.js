@@ -9,9 +9,7 @@ import { validation } from "../../middleware/validation.js";
 import { protectRoutes } from "../../middleware/authentication.js";
 import {
   addProductToCart,
- 
-  clearcart,
- 
+  clearCart,
   getLoggedUserCart,
   removeProductFromCart,
   // removeSpecificCartItem,
@@ -41,7 +39,7 @@ cartRouter.get(
   getLoggedUserCart
 );
 
-cartRouter.delete(
+cartRouter.put(
   "/removeSpecificCartItem/:productId",
   protectRoutes,  
   allowedTo("User", "Admin"),
@@ -53,7 +51,7 @@ cartRouter.delete(
   "/clearCart",
   protectRoutes,
   allowedTo("User", "Admin"),
-  clearcart 
+  clearCart
 );
 
 export default cartRouter;

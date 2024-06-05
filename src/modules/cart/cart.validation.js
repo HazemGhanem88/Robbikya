@@ -8,7 +8,7 @@ const objectIdValidation = (value, helper) => {
 
 export const addProductToCartSchema = Joi.object({
   
-  product: Joi.string().required().custom(objectIdValidation),
+  productId: Joi.string().required().custom(objectIdValidation),
   quantity: Joi.number().greater(0).optional(),
   
 });
