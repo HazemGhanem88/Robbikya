@@ -28,7 +28,7 @@ const signUp=catchError(async(req,res,next)=>{
    await user.hashPass()
    await user.save()
    //console.log(user)
-   let token=Jwt.sign({userId:user._id,role:user.role},"your");
+   let token=Jwt.sign({userId:user._id,role:user.role},"secret_key");
     res.status(201).json({ message: "success" ,user:user._id,token});
 })
 })
@@ -44,7 +44,7 @@ const signIn = catchError(async (req, res, next) => {
     await UserModel.findByIdAndUpdate(user._id, { status: "online" });
     let token = Jwt.sign(
       { userId: user._id, role: user.role },
-      "your"
+      "secret_key"
     );
     return res.status(201).json({ message: "success",user:user._id,token });
   }
@@ -78,7 +78,7 @@ const UpdatePassword = catchError(async (req, res, next) => {
   if (user && bcrypt.compareSync(req.body.currentPassword, user.password)) {
     let token = Jwt.sign(
       { userId: user._id, role: user.role },
-      "your"
+      "secret_key"
     );
     const hashPass = await bcrypt.hash(req.body.newPassword, 8);
     await UserModel.findByIdAndUpdate(req.user._id, {
