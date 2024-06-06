@@ -15,13 +15,13 @@ const auctionRouter = express.Router()
 auctionRouter
 .route('/')
 .post(protectRoutes,allowedTo('Admin','User'),validation(addauctionval),addacuction)
-.get(protectRoutes,allowedTo('Admin','User'),getauction)
+//.get(protectRoutes,allowedTo('Admin','User'),getauction)
 
 
 auctionRouter
-.route('/:id')
+.route('/:productId')
 .put(protectRoutes,allowedTo('Admin','User'),validation(updateauctionval),updateauction)
-//.get(protectRoutes,allowedTo('Admin','User'),getauction)
+.get(protectRoutes,allowedTo('Admin','User'),getauction)
 
 
 
