@@ -7,7 +7,6 @@ import { catchError } from "../../middleware/catchError.js"
 import { sendEmailPcode } from "../../services/emails/sentEmailPinCode.js"
 import { AppError } from "../../utils/AppError.js"
 
-
 import {v2 as cloudinary} from 'cloudinary';
 import { ApiFeatures } from "../../utils/ApiFeatures.js"
           
