@@ -18,7 +18,8 @@ const updateauctionval = Joi.object({
     ProductId :Joi.string().hex().length(24),
     UserId:Joi.string().hex().length(24),
     fristPrice:Joi.number(),
-    highestPrice:Joi.number()
+    highestPrice:Joi.number(),
+    newPrice:Joi.number()
         
 
 })
