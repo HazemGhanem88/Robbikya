@@ -5,7 +5,7 @@ const addacuction = catchError(async(req,res,next) => {
     let auction =  new AuctionModel(req.body)
     console.log (req.body)
     await auction.save()
-    res.status(200).json({massage:"success"})
+    res.status(200).json({massage:"success",auction})
   })
 
   
@@ -13,7 +13,7 @@ const addacuction = catchError(async(req,res,next) => {
   
  const getauction=catchError(async(req,res,next) => {
     try {
-        const auction = await AuctionModel.findById(req.params.id);
+        const auction = await AuctionModel.find({});
         if (!auction) {
             return res.status(404).send('Auction not found');
         }
