@@ -14,7 +14,7 @@ const addauctionval = Joi.object({
 
 
 const updateauctionval = Joi.object({
-    id: Joi.string().hex().length(24).required(),
+    productId:Joi.string().hex().length(24).required(),
     ProductId :Joi.string().hex().length(24),
     UserId:Joi.string().hex().length(24),
     fristPrice:Joi.number(),
@@ -27,7 +27,7 @@ const updateauctionval = Joi.object({
 
 
 const paramval =Joi.object({
-    id: Joi.string().hex().length(24).required(),
+    productId: Joi.string().hex().length(24).required(),
 })
 
 
