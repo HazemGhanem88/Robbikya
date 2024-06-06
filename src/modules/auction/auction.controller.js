@@ -13,7 +13,7 @@ const addacuction = catchError(async(req,res,next) => {
   
  const getauction=catchError(async(req,res,next) => {
     try {
-        const auction = await AuctionModel.findOne({ ProductId: req.params.productId });
+        const auction = await AuctionModel.findById(req.params.id);
         if (!auction) {
             return res.status(404).send('Auction not found');
         }
