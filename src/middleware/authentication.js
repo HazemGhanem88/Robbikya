@@ -11,7 +11,7 @@ const protectRoutes = catchError(async(req,res,next)=>{
   let {token}=req.headers 
   if(!token) return next(new AppError('not founded token',401))
   
-  let decoded = Jwt.verify(token ,process.env.JWT_SECRET)
+  let decoded = Jwt.verify(token ,"secret_key")
   let user = await UserModel.findById(decoded.userId)  
   if(!user) return next(new AppError('not founded user',401))
 
