@@ -1,5 +1,5 @@
 import { protectRoutes } from "../../middleware/authentication.js"
-import express from express
+import express from "express"
 import { allowedTo } from "../../middleware/authorization.js"
 import { validation } from "../../middleware/validation.js"
 import { addauctionval, updateauctionval } from "./auction.validation.js"
