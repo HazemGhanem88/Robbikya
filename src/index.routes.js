@@ -5,6 +5,7 @@ import auctionRouter from "./modules/auction/auction.routes.js"
 import biddeeRouter from "./modules/bidders/bidders.routes.js"
 import cartRouter from "./modules/cart/cart.routes.js"
 import categoryRouter from "./modules/category/category.routes.js"
+import contactRouter from "./modules/contact/contact.routes.js"
 import favoritepageRouter from "./modules/favoritepage/favoritepage.routes.js"
 import photoRouter from "./modules/machine/machine.routes.js"
 import OrderRouter from "./modules/orders/order.routes.js"
@@ -27,6 +28,7 @@ export const bootstap = (app)=>{
     app.use("/api/v1/favoritepage",favoritepageRouter);
     app.use("/api/v1/photo",photoRouter);
     app.use("/api/v1/auction",auctionRouter);
+    app.use("/api/v1/contact",contactRouter);
 
  
 
