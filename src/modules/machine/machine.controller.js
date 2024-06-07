@@ -83,7 +83,7 @@ const addPhoto = async (req, res, next) => {
 
       
       res.json({
-          message: `The highest probability prediction is ${classificationResult.className} with a probability of ${(classificationResult.probability * 100).toFixed(2)}%`
+          message:`${classificationResult.className}`
       });
   } catch (error) {
       
@@ -95,3 +95,7 @@ const addPhoto = async (req, res, next) => {
 export {
   addPhoto
 };
+
+
+
+//message: `The highest probability prediction is ${classificationResult.className} with a probability of ${(classificationResult.probability * 100).toFixed(2)}%`
