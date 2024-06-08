@@ -15,7 +15,7 @@ const contactRouter = express.Router()
 contactRouter
 .route('/')
 .post(protectRoutes,allowedTo('User','Admin'),validation(addcontactval),addcontact)
-.get('/allReport').get(getcontact)
+.get(protectRoutes,allowedTo('User','Admin'),getcontact)
 
 
 
